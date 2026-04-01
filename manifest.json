@@ -1,0 +1,20 @@
+{
+  "name": "MC Mod Store Admin",
+  "short_name": "Mod Admin",
+  "start_url": "./admin.html",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#55ff55",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/3yC10sZf/IMG-20260401-154147-339.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.ibb.co/3yC10sZf/IMG-20260401-154147-339.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

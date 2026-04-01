@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>MCPE MODS | Mobile Gaming Hub</title>
+    <style>
+        /* =============================================
+           MOBILE-FIRST DARK GAMING STYLE
+           Compact 2-column cards with equal heights
+           Screenshot Gallery Styles
+        ============================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Orbitron', 'Segoe UI', 'Poppins', 'Rajdhani', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at 20% 30%, #0a0c0f, #030507);
+            min-height: 100vh;
+            color: #eef5ff;
+            line-height: 1.4;
+        }
+
+        /* Main wrapper - full width mobile-first */
+        .app-wrapper {
+            max-width: 100%;
+            margin: 0 auto;
+            background: rgba(5, 8, 12, 0.92);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========= STICKY SEARCH HEADER ========= */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(3, 7, 10, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 0.8rem 0.9rem 0.6rem;
+            border-bottom: 1px solid rgba(85, 255, 85, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff, #55ff55);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 6px rgba(85, 255, 85, 0.4);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .badge-icon {
+            font-size: 0.9rem;
+            background: rgba(85, 255, 85, 0.2);
+            padding: 0.15rem 0.6rem;
+            border-radius: 40px;
+            border: 1px solid #55ff55;
+        }
+
+        /* Search Input - Touch friendly */
+        .search-wrapper {
+            width: 100%;
+            margin-top: 0.2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            font-family: 'Rajdhani', monospace;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.75);
+            border: 1.5px solid #2a452a;
+            border-radius: 60px;
+            color: #e0ffe0;
+            outline: none;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+            letter-spacing: 0.5px;
+            min-height: 44px;
+        }
+
+        .search-input:focus {
+            border-color: #55ff55;
+            box-shadow: 0 0 14px rgba(85, 255, 85, 0.6);
+            background: rgba(8, 15, 12, 0.9);
+        }
+
+        /* ========= HORIZONTAL SCROLLABLE FILTER BAR ========= */
+        .filter-scroll-wrapper {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.6rem 0 0.7rem 0;
+            border-bottom: 1px solid rgba(85, 255, 85, 0.2);
+        }
+
+        .filter-horizontal {
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            gap: 0.7rem;
+            padding: 0 0.9rem;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .filter-horizontal::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .filter-horizontal::-webkit-scrollbar-track {
+            background: #1a2a1a;
+            border-radius: 10px;
+        }
+
+        .filter-horizontal::-webkit-scrollbar-thumb {
+            background: #55ff55;
+            border-radius: 10px;
+        }
+
+        /* Touch-friendly filter buttons */
+        .filter-btn {
+            flex-shrink: 0;
+            background: rgba(10, 15, 12, 0.9);
+            border: 1px solid #3a553a;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.12s linear;
+            color: #c0ffc0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn:active {
+            transform: scale(0.96);
+            background: #2a5a2a;
+            border-color: #88ff88;
+            box-shadow: 0 0 12px #55ff55;
+        }
+
+        .filter-btn.active {
+            background: #1f3a1f;
+            border-color: #55ff55;
+            color: #ffffff;
+            box-shadow: 0 0 12px #55ff55;
+            text-shadow: 0 0 2px #00aa00;
+        }
+
+        /* ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(85, 255, 85, 0.5);
+            transform: scale(0);
+            animation: ripple-animation 0.5s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* ========= MAIN CONTENT (Cards) ========= */
+        .main-content {
+            flex: 1;
+            padding: 1rem 0.8rem 1.5rem;
+        }
+
+        /* Cards Container - Mobile: 2 columns */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.9rem;
+            margin-bottom: 1.5rem;
+            align-items: stretch;
+        }
+
+        @media (min-width: 600px) {
+            .cards-container {
+                gap: 1rem;
+            }
+        }
+
+        /* MOD CARD */
+        .mod-card {
+            background: rgba(10, 15, 18, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1.5px solid #55ff55;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 4px rgba(85, 255, 85, 0.3);
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .mod-card:active {
+            transform: scale(0.97);
+            box-shadow: 0 0 14px rgba(85, 255, 85, 0.7);
+        }
+
+        .card-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #1a1c20;
+            border-bottom: 1px solid rgba(85, 255, 85, 0.4);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .card-img::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(85, 255, 85, 0.2);
+            border-top-color: #55ff55;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .card-img.loading::before {
+            opacity: 1;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .mod-card:hover .card-img img {
+            transform: scale(1.05);
+        }
+
+        .card-img .img-fallback {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            background: radial-gradient(circle at 30% 30%, #1a2a1a, #030a03);
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .card-content {
+            padding: 0.7rem 0.7rem 0.8rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 0.4rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.2rem;
+        }
+
+        .card-category {
+            display: inline-block;
+            background: rgba(85, 255, 85, 0.2);
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: fit-content;
+            color: #b5ffb5;
+            border-left: 1.5px solid #55ff55;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.25;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #ffffff, #c0ffc0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0.1rem 0 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-description {
+            font-size: 0.7rem;
+            color: #bbddbb;
+            line-height: 1.3;
+            font-family: 'Rajdhani', monospace;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        .download-btn-full {
+            background: rgba(30, 55, 30, 0.9);
+            border: 1px solid #55ff55;
+            border-radius: 40px;
+            padding: 0.45rem 0.3rem;
+            margin-top: 0.5rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.7rem;
+            color: #caffca;
+            transition: all 0.1s ease;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .download-btn-full:active {
+            background: #2c6e2c;
+            transform: scale(0.96);
+            box-shadow: 0 0 8px #55ff55;
+        }
+
+        .fav-btn-small {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 4px;
+            min-width: 36px;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s;
+            flex-shrink: 0;
+        }
+
+        .fav-btn-small:active {
+            transform: scale(0.9);
+        }
+
+        /* ========= MODAL STYLES ========= */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: rgba(18, 18, 28, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid rgba(85, 255, 85, 0.5);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(85, 255, 85, 0.3);
+            transform: translateY(30px);
+            transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1.5px solid #55ff55;
+            color: #55ff55;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1010;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-back-btn:active {
+            transform: scale(0.92);
+            background: #55ff55;
+            color: #000000;
+        }
+
+        .modal-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #1a1c20;
+            border-bottom: 2px solid rgba(85, 255, 85, 0.4);
+        }
+
+        .modal-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-content {
+            padding: 1.5rem 1.3rem 1.8rem;
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #ffffff, #55ff55);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-category {
+            display: inline-block;
+            background: rgba(85, 255, 85, 0.2);
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #aaffaa;
+            border-left: 2px solid #55ff55;
+            margin-bottom: 1rem;
+        }
+
+        .modal-long-desc {
+            color: #d0ecd0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0.8rem 0 1rem;
+            font-family: 'Rajdhani', monospace;
+        }
+
+        /* ========= SCREENSHOT GALLERY ========= */
+        .screenshot-section {
+            margin: 1.2rem 0;
+        }
+
+        .screenshot-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #55ff55;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .screenshot-gallery {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 12px;
+            padding-bottom: 8px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .screenshot-gallery::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .screenshot-gallery::-webkit-scrollbar-track {
+            background: rgba(85, 255, 85, 0.1);
+            border-radius: 10px;
+        }
+
+        .screenshot-gallery::-webkit-scrollbar-thumb {
+            background: #55ff55;
+            border-radius: 10px;
+        }
+
+        .screenshot-item {
+            flex-shrink: 0;
+            width: 260px;
+            height: 150px;
+            scroll-snap-align: start;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(85, 255, 85, 0.4);
+            background: #0a0e12;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .screenshot-item:active {
+            transform: scale(0.98);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .no-screenshots {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            color: #8fbf8f;
+            font-size: 0.8rem;
+            font-family: 'Rajdhani', monospace;
+        }
+
+        .compatibility-box {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(85, 255, 85, 0.4);
+        }
+
+        .compatibility-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #55ff55;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .compat-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 0.7rem;
+            font-size: 0.85rem;
+            color: #c0e0c0;
+        }
+
+        .compat-icon {
+            font-size: 1rem;
+            min-width: 24px;
+            color: #55ff55;
+        }
+
+        .compat-text strong {
+            color: #aaffaa;
+        }
+
+        .compat-note {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(85, 255, 85, 0.3);
+            font-size: 0.75rem;
+            color: #8fbf8f;
+            display: flex;
+            gap: 8px;
+        }
+
+        .tech-info {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            border: 1px solid rgba(85, 255, 85, 0.3);
+        }
+
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .tech-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: #8fbf8f;
+            letter-spacing: 1px;
+        }
+
+        .tech-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #caffca;
+            font-family: monospace;
+        }
+
+        .modal-download-btn {
+            background: linear-gradient(135deg, #2a6e2a, #1f4a1f);
+            border: 2px solid #55ff55;
+            border-radius: 60px;
+            padding: 0.9rem;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Orbitron', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .modal-download-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 0 20px #55ff55;
+            background: #2c8e2c;
+        }
+
+        .bottom-nav {
+            background: rgba(3, 8, 12, 0.95);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(85, 255, 85, 0.4);
+            padding: 0.5rem 0.8rem 0.8rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            z-index: 90;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            background: transparent;
+            border: none;
+            color: #8aa88a;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 40px;
+            min-height: 44px;
+            justify-content: center;
+        }
+
+        .nav-item:active {
+            transform: scale(0.92);
+            background: rgba(85, 255, 85, 0.2);
+            color: #55ff55;
+        }
+
+        .nav-item.active {
+            color: #55ff55;
+            text-shadow: 0 0 6px #55ff55;
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        .nav-label {
+            font-size: 0.6rem;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.55rem;
+            color: #4a6e4a;
+            padding: 0.4rem;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 1.5rem;
+            border: 1px dashed #55ff55;
+            color: #88dd88;
+        }
+    </style>
+</head>
+<body>
+<div class="app-wrapper">
+    <div class="sticky-header">
+        <div class="logo-area">
+            <span class="logo-title">⚡ MCPE MODS</span>
+            <span class="badge-icon">v2.0</span>
+        </div>
+        <div class="search-wrapper">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search mods, textures, maps...">
+        </div>
+    </div>
+
+    <div class="filter-scroll-wrapper">
+        <div class="filter-horizontal" id="filterScroll">
+            <button class="filter-btn active" data-category="all">🔥 All</button>
+            <button class="filter-btn" data-category="mods">⚙️ Mods</button>
+            <button class="filter-btn" data-category="textures">🎨 Textures</button>
+            <button class="filter-btn" data-category="maps">🗺️ Maps</button>
+            <button class="filter-btn" data-category="seeds">🌱 Seeds</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div id="cardsContainer" class="cards-container"></div>
+    </div>
+
+    <div class="bottom-nav" id="bottomNav">
+        <button class="nav-item active" data-nav="home"><div class="nav-icon">🏠</div><span class="nav-label">HOME</span></button>
+        <button class="nav-item" data-nav="trending"><div class="nav-icon">🔥</div><span class="nav-label">TRENDING</span></button>
+        <button class="nav-item" data-nav="favorites"><div class="nav-icon">💚</div><span class="nav-label">FAVORITES</span></button>
+    </div>
+    <div class="footer-note">MCPE Hub • Tap any card to view details</div>
+</div>
+
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal-container">
+        <button class="modal-back-btn" id="modalBackBtn">←</button>
+        <div class="modal-img" id="modalImage">🎮</div>
+        <div class="modal-content">
+            <h2 class="modal-title" id="modalTitle">Mod Title</h2>
+            <span class="modal-category" id="modalCategory">MODS</span>
+            <p class="modal-long-desc" id="modalDescription">Loading description...</p>
+            
+            <!-- Screenshot Gallery Section -->
+            <div class="screenshot-section" id="screenshotSection">
+                <div class="screenshot-title"><span>📸</span> SCREENSHOTS</div>
+                <div class="screenshot-gallery" id="screenshotGallery"></div>
+            </div>
+            
+            <div class="compatibility-box">
+                <div class="compatibility-title"><span>🔧</span> COMPATIBILITY</div>
+                <div class="compat-item"><div class="compat-icon">📱</div><div class="compat-text"><strong>Game Version:</strong> <span id="modalVersionRange">-</span></div></div>
+                <div class="compat-item"><div class="compat-icon">🎮</div><div class="compat-text"><strong>Platform:</strong> <span id="modalPlatform">-</span></div></div>
+                <div class="compat-item"><div class="compat-icon">⚙️</div><div class="compat-text"><strong>Requirements:</strong> <span id="modalRequirements">-</span></div></div>
+                <div class="compat-note" id="modalCompatNote"><span>💡</span><span>Works on Official Minecraft</span></div>
+            </div>
+            <div class="tech-info">
+                <div class="tech-item"><span class="tech-label">💾 SIZE</span><span class="tech-value" id="modalFileSize">-</span></div>
+                <div class="tech-item"><span class="tech-label">⬇️ DOWNLOADS</span><span class="tech-value" id="modalDownloads">-</span></div>
+            </div>
+            <div class="modal-download-btn" id="modalDownloadBtn">⬇️ DOWNLOAD NOW ⬇️</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========= MODS DATA WITH SCREENSHOTS =========
+    const modsData = [
+        { 
+            id: 1, title: "WHITE BLOCK OUTLINE", category: "textures", 
+            description: "Adds a clean white highlight to block edges.", downloadCount: "42.8K", trending: 95, 
+            version: "1.20.60+", fileSize: "4.2 MB", 
+            imageUrl: "https://i.pinimg.com/474x/b7/fd/ea/b7fdea43577da3f7eda6979745e16f5f.jpg",
+            screenshots: [
+                "https://i.pinimg.com/474x/b7/fd/ea/b7fdea43577da3f7eda6979745e16f5f.jpg",
+                "https://via.placeholder.com/400x225/2a6e2a/55ff55?text=White+Outline+Demo+2",
+                "https://via.placeholder.com/400x225/1f4a1f/55ff55?text=Block+Highlight+Example"
+            ],
+            platform: "Minecraft Bedrock Edition", requirements: "No special requirements", 
+            minVersion: "v1.20.0", maxVersion: "Latest", 
+            compatNote: "Lightweight texture pack • No performance impact",
+            longDescription: "Enhance your Minecraft experience with the White Block Outline texture pack! Adds bright white outlines to every block edge, making building and navigation easier." 
+        },
+        { 
+            id: 2, title: "MORE STRUCTURES ADD-ON", category: "mods", 
+            description: "Adds over 30+ new natural structures.", downloadCount: "24.5K", trending: 88, 
+            version: "1.20.60+", fileSize: "8.7 MB", 
+            imageUrl: "https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/d7d34bb3-c38d-4de5-a31f-0f433627e914/MoreStructures_Thumbnail_0.jpg",
+            screenshots: [
+                "https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/d7d34bb3-c38d-4de5-a31f-0f433627e914/MoreStructures_Thumbnail_0.jpg",
+                "https://via.placeholder.com/400x225/2a6e2a/55ff55?text=Desert+Ruins+Screenshot",
+                "https://via.placeholder.com/400x225/1f4a1f/55ff55?text=Abandoned+Tower+View"
+            ],
+            platform: "Minecraft Bedrock Edition", requirements: "Requires Experimental Gameplay", 
+            minVersion: "v1.20.50", maxVersion: "v1.21.0+", 
+            compatNote: "Enable 'Experimental Features' in world settings",
+            longDescription: "This add-on breathes life into your Minecraft world by generating unique structures like abandoned towers, small dungeons, and desert ruins." 
+        },
+        { 
+            id: 3, title: "CUSTOM VANILLA LIGHTS", category: "textures", 
+            description: "Beautiful custom light textures.", downloadCount: "31.2K", trending: 92, 
+            version: "1.20.50+", fileSize: "3.1 MB", 
+            imageUrl: "https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/b3635f81-23e3-4ce1-9795-e524aa0f46eb/CustomVanillaLights_Thumbnail_0.jpg",
+            screenshots: [
+                "https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/b3635f81-23e3-4ce1-9795-e524aa0f46eb/CustomVanillaLights_Thumbnail_0.jpg",
+                "https://via.placeholder.com/400x225/2a6e2a/55ff55?text=Glowing+Lanterns+Demo",
+                "https://via.placeholder.com/400x225/1f4a1f/55ff55?text=Torch+Light+Effect"
+            ],
+            platform: "Minecraft Bedrock & Pocket Edition", requirements: "No patches needed", 
+            minVersion: "v1.20.0", maxVersion: "Latest", 
+            compatNote: "Fully compatible with shaders and RTX",
+            longDescription: "Enhance your builds with custom light source textures. Modifies torches, lanterns, and glowstones for a vibrant, warm glow." 
+        },
+        { 
+            id: 4, title: "VEHICLE CRAFT+", category: "mods", 
+            description: "Drivable cars, helicopters & motorcycles.", downloadCount: "31.5K", iconEmoji: "🚗💨", 
+            trending: 94, version: "1.20.60+", fileSize: "24.5 MB",
+            screenshots: [],
+            platform: "Bedrock Edition", requirements: "Requires Experimental Gameplay", 
+            minVersion: "v1.20.0", maxVersion: "v1.21.0+", 
+            compatNote: "Enable experimental features",
+            longDescription: "Take to the roads and skies with Vehicle Craft+! Adds fully drivable cars, helicopters, motorcycles, and a speedboat." 
+        }
+    ];
+
+    // Favorites system
+    let favorites = new Set();
+    try { const stored = localStorage.getItem('mcpe_favorites'); if (stored) favorites = new Set(JSON.parse(stored)); } catch(e) {}
+
+    function saveFavorites() { localStorage.setItem('mcpe_favorites', JSON.stringify([...favorites])); }
+
+    // DOM elements
+    const cardsContainer = document.getElementById('cardsContainer');
+    const searchInput = document.getElementById('searchInput');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const navItems = document.querySelectorAll('.nav-item');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalBackBtn = document.getElementById('modalBackBtn');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalCategory = document.getElementById('modalCategory');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalVersionRange = document.getElementById('modalVersionRange');
+    const modalPlatform = document.getElementById('modalPlatform');
+    const modalRequirements = document.getElementById('modalRequirements');
+    const modalCompatNote = document.getElementById('modalCompatNote');
+    const modalFileSize = document.getElementById('modalFileSize');
+    const modalDownloads = document.getElementById('modalDownloads');
+    const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+    const screenshotSection = document.getElementById('screenshotSection');
+    const screenshotGallery = document.getElementById('screenshotGallery');
+
+    let currentModId = null;
+    let currentCategory = 'all';
+    let currentSearchQuery = '';
+    let currentNav = 'home';
+
+    function getCardImageHtml(mod) {
+        if (mod.imageUrl) return `<img src="${mod.imageUrl}" alt="${mod.title}" loading="lazy" onload="this.parentElement?.classList.remove('loading')" onerror="this.parentElement.innerHTML='<div class=\'img-fallback\'>🎮</div>'">`;
+        if (mod.iconEmoji) return `<div class="img-fallback">${mod.iconEmoji}</div>`;
+        return `<div class="img-fallback">🎮</div>`;
+    }
+
+    function getModalImageHtml(mod) {
+        if (mod.imageUrl) return `<img src="${mod.imageUrl}" alt="${mod.title}">`;
+        if (mod.iconEmoji) return `<div class="img-fallback">${mod.iconEmoji}</div>`;
+        return `<div class="img-fallback">🎮</div>`;
+    }
+
+    function addRipple(event, element) {
+        const ripple = document.createElement('span');
+        ripple.classList.add('ripple');
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = `${size}px`;
+        const x = event.clientX - rect.left - size/2;
+        const y = event.clientY - rect.top - size/2;
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        element.style.position = 'relative';
+        element.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 500);
+    }
+
+    function attachRippleToButtons() {
+        document.querySelectorAll('.filter-btn, .nav-item, .download-btn-full, .fav-btn-small, .modal-download-btn, .modal-back-btn, .screenshot-item').forEach(btn => {
+            btn.removeEventListener('click', rippleHandler);
+            btn.addEventListener('click', rippleHandler);
+        });
+    }
+    function rippleHandler(e) { addRipple(e, this); }
+
+    function openModal(modId) {
+        const mod = modsData.find(m => m.id === modId);
+        if (!mod) return;
+        currentModId = modId;
+        
+        modalImage.innerHTML = getModalImageHtml(mod);
+        modalTitle.innerText = mod.title;
+        let catLabel = mod.category === 'mods' ? '⚡ MODS' : (mod.category === 'textures' ? '🎨 TEXTURES' : (mod.category === 'maps' ? '🗺️ MAPS' : '🌱 SEEDS'));
+        modalCategory.innerText = catLabel;
+        modalDescription.innerText = mod.longDescription || mod.description;
+        modalVersionRange.innerText = `${mod.minVersion || 'v1.20.0'} - ${mod.maxVersion || 'Latest'}`;
+        modalPlatform.innerText = mod.platform || 'Minecraft Bedrock';
+        modalRequirements.innerText = mod.requirements || 'No special requirements';
+        modalCompatNote.innerHTML = `<span>💡</span> <span>${mod.compatNote || 'Works on Official Minecraft'}</span>`;
+        modalFileSize.innerText = mod.fileSize || '~12 MB';
+        modalDownloads.innerText = mod.downloadCount;
+        
+        // Handle Screenshot Gallery
+        if (mod.screenshots && mod.screenshots.length > 0) {
+            screenshotSection.style.display = 'block';
+            screenshotGallery.innerHTML = mod.screenshots.map((url, idx) => `
+                <div class="screenshot-item" data-fullscreen="${url}">
+                    <img src="${url}" alt="Screenshot ${idx + 1}" loading="lazy" onerror="this.src='https://via.placeholder.com/260x150/2a2e32/55ff55?text=Image+Not+Found'">
+                </div>
+            `).join('');
+            // Add click to open fullscreen (optional)
+            document.querySelectorAll('.screenshot-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const imgUrl = item.getAttribute('data-fullscreen');
+                    if (imgUrl) window.open(imgUrl, '_blank');
+                });
+                item.addEventListener('click', rippleHandler);
+            });
+        } else {
+            screenshotSection.style.display = 'none';
+            screenshotGallery.innerHTML = '';
+        }
+        
+        modalOverlay.classList.add('active');
+    }
+    
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        currentModId = null;
+    }
+
+    function renderCards() {
+        let filtered = [...modsData];
+        if (currentNav === 'trending') filtered.sort((a,b) => (b.trending || 0) - (a.trending || 0));
+        else if (currentNav === 'favorites') filtered = filtered.filter(item => favorites.has(item.id));
+        if (currentCategory !== 'all') filtered = filtered.filter(item => item.category === currentCategory);
+        const query = currentSearchQuery.trim().toLowerCase();
+        if (query) filtered = filtered.filter(item => item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query));
+        
+        if (filtered.length === 0) {
+            cardsContainer.innerHTML = `<div class="no-results">💀 NO MODS FOUND<br>🔍 Try different keywords</div>`;
+            return;
+        }
+        
+        let cardsHtml = '';
+        for (const mod of filtered) {
+            let catLabel = mod.category === 'mods' ? '⚡ MODS' : (mod.category === 'textures' ? '🎨 TEXTURES' : (mod.category === 'maps' ? '🗺️ MAPS' : '🌱 SEEDS'));
+            const isFav = favorites.has(mod.id);
+            const imageHtml = getCardImageHtml(mod);
+            
+            cardsHtml += `
+                <div class="mod-card" data-id="${mod.id}">
+                    <div class="card-img loading">${imageHtml}</div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <span class="card-category">${catLabel}</span>
+                            <button class="fav-btn-small" data-id="${mod.id}">${isFav ? '💚' : '🤍'}</button>
+                        </div>
+                        <h3 class="card-title">${escapeHtml(mod.title)}</h3>
+                        <p class="card-description">${escapeHtml(mod.description)}</p>
+                        <div class="download-btn-full" data-download="${mod.id}">⬇️ ${mod.downloadCount}</div>
+                    </div>
+                </div>
+            `;
+        }
+        cardsContainer.innerHTML = cardsHtml;
+        
+        document.querySelectorAll('.card-img img').forEach(img => {
+            if (img.complete) img.parentElement?.classList.remove('loading');
+            else img.addEventListener('load', () => img.parentElement?.classList.remove('loading'));
+        });
+        
+        document.querySelectorAll('.mod-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                if (e.target.classList.contains('fav-btn-small') || e.target.classList.contains('download-btn-full')) return;
+                openModal(parseInt(card.getAttribute('data-id')));
+            });
+        });
+        
+        document.querySelectorAll('.fav-btn-small').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute('data-id'));
+                if (favorites.has(id)) favorites.delete(id);
+                else favorites.add(id);
+                saveFavorites();
+                renderCards();
+            });
+            btn.addEventListener('click', rippleHandler);
+        });
+        
+        document.querySelectorAll('.download-btn-full').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                alert(`⚡ Download: ${modsData.find(m => m.id == btn.getAttribute('data-download'))?.title}`);
+            });
+            btn.addEventListener('click', rippleHandler);
+        });
+        
+        attachRippleToButtons();
+    }
+    
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+    
+    function updateActiveFilterUI() { filterBtns.forEach(btn => { if(btn.getAttribute('data-category') === currentCategory) btn.classList.add('active'); else btn.classList.remove('active'); }); }
+    function updateActiveNav() { navItems.forEach(item => { if(item.getAttribute('data-nav') === currentNav) item.classList.add('active'); else item.classList.remove('active'); }); }
+    
+    filterBtns.forEach(btn => { btn.addEventListener('click', () => { currentCategory = btn.getAttribute('data-category'); updateActiveFilterUI(); renderCards(); }); btn.addEventListener('click', rippleHandler); });
+    searchInput.addEventListener('input', (e) => { currentSearchQuery = e.target.value; renderCards(); });
+    navItems.forEach(item => { item.addEventListener('click', () => { currentNav = item.getAttribute('data-nav'); updateActiveNav(); renderCards(); }); item.addEventListener('click', rippleHandler); });
+    
+    modalBackBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) closeModal(); });
+    modalDownloadBtn.addEventListener('click', () => { if(currentModId) alert(`⬇️ Downloading ${modsData.find(m=>m.id===currentModId)?.title}`); closeModal(); });
+    modalDownloadBtn.addEventListener('click', rippleHandler);
+    modalBackBtn.addEventListener('click', rippleHandler);
+    
+    updateActiveNav();
+    updateActiveFilterUI();
+    renderCards();
+</script>
+</body>
+</html>

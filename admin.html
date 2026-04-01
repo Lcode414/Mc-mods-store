@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Admin Hub | MCPE</title>
+    <style>
+        :root { --neon-green: #55ff55; --bg-dark: #0a0c10; --card-bg: #161b22; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg-dark); color: #eef5ff; padding: 20px; margin: 0; }
+        .admin-box { max-width: 700px; margin: 20px auto; background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(85, 255, 85, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { color: var(--neon-green); text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+        
+        .input-group { margin-bottom: 18px; }
+        label { display: block; font-size: 12px; color: var(--neon-green); text-transform: uppercase; margin-bottom: 6px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; outline: none; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: var(--neon-green); box-shadow: 0 0 8px rgba(85, 255, 85, 0.2); }
+        
+        .btn-container { margin-top: 20px; }
+        button { width: 100%; padding: 15px; background: var(--neon-green); border: none; border-radius: 10px; color: black; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        button:hover { background: #3ef03e; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(85, 255, 85, 0.4); }
+        
+        /* Mod List Style */
+        .mod-item { background: #21262d; padding: 15px; margin-top: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--neon-green); }
+        .mod-info h4 { margin: 0; color: white; }
+        .mod-info p { margin: 3px 0 0; font-size: 12px; color: #8b949e; }
+        .action-btns { display: flex; gap: 8px; }
+        .edit-btn { background: #30363d; color: white; padding: 6px 12px; width: auto; font-size: 12px; }
+        .del-btn { background: #da3633; color: white; padding: 6px 12px; width: auto; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-box">
+    <h2 id="formTitle">Add New Mod</h2>
+    <input type="hidden" id="editId">
+    
+    <div class="grid-inputs">
+        <div class="input-group full-width">
+            <label>Mod Title</label>
+            <input type="text" id="title" placeholder="Enter mod name...">
+        </div>
+        
+        <div class="input-group">
+            <label>Category</label>
+            <select id="category">
+                <option value="mods">⚙️ Mods</option>
+                <option value="textures">🎨 Textures</option>
+                <option value="maps">🗺️ Maps</option>
+                <option value="seeds">🌱 Seeds</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Version (e.g. 1.21.0+)</label>
+            <input type="text" id="version" placeholder="1.20.x">
+        </div>
+
+        <div class="input-group full-width">
+            <label>Thumbnail Image URL</label>
+            <input type="text" id="imageUrl" placeholder="Direct link to cover image...">
+        </div>
+
+        <div class="input-group full-width">
+            <label>Mod File Download URL (Zip/McPack)</label>
+            <input type="text" id="downloadUrl" placeholder="Link to Mediafire/Google Drive/Direct file...">
+        </div>
+
+        <div class="input-group full-width">
+            <label>Short Description</label>
+            <input type="text" id="desc" placeholder="Brief summary for card...">
+        </div>
+
+        <div class="input-group full-width">
+            <label>Long Description</label>
+            <textarea id="longDesc" rows="4" placeholder="Detailed info about the mod..."></textarea>
+        </div>
+
+        <div class="input-group full-width">
+            <label>Screenshots (URLs separated by comma)</label>
+            <textarea id="screenshots" rows="2" placeholder="url1, url2, url3"></textarea>
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <button id="saveBtn">🚀 Upload Mod to Firebase</button>
+    </div>
+</div>
+
+<div id="modDisplayList" style="max-width: 700px; margin: 0 auto 50px;"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // FIXME: သင်၏ Firebase Config ကို ဤနေရာတွင် အစားထိုးပါ
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
+        databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+        projectId: "YOUR_PROJECT",
+        storageBucket: "YOUR_PROJECT.appspot.com",
+        messagingSenderId: "...",
+        appId: "..."
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const modsRef = ref(db, 'mods');
+
+    const saveBtn = document.getElementById('saveBtn');
+
+    // Save or Update Mod
+    saveBtn.addEventListener('click', () => {
+        const id = document.getElementById('editId').value;
+        const data = {
+            title: document.getElementById('title').value,
+            category: document.getElementById('category').value,
+            version: document.getElementById('version').value,
+            imageUrl: document.getElementById('imageUrl').value,
+            downloadUrl: document.getElementById('downloadUrl').value,
+            description: document.getElementById('desc').value,
+            longDescription: document.getElementById('longDesc').value,
+            screenshots: document.getElementById('screenshots').value.split(',').map(s => s.trim()).filter(s => s !== ""),
+            downloadCount: "0" // Default count
+        };
+
+        if(!data.title || !data.downloadUrl) return alert("Title and Download URL are required!");
+
+        if(id) {
+            update(ref(db, 'mods/' + id), data).then(() => {
+                alert("Updated!");
+                resetForm();
+            });
+        } else {
+            push(modsRef, data).then(() => {
+                alert("Uploaded Successfully!");
+                resetForm();
+            });
+        }
+    });
+
+    function resetForm() {
+        document.querySelectorAll('input, textarea').forEach(i => i.value = '');
+        document.getElementById('editId').value = '';
+        document.getElementById('formTitle').innerText = "Add New Mod";
+        saveBtn.innerText = "🚀 Upload Mod to Firebase";
+    }
+
+    // Load Mods for Edit/Delete
+    onValue(modsRef, (snapshot) => {
+        const listDiv = document.getElementById('modDisplayList');
+        listDiv.innerHTML = "<h3 style='color:#8b949e'>Manage Uploaded Mods</h3>";
+        snapshot.forEach((child) => {
+            const mod = child.val();
+            const key = child.key;
+            listDiv.innerHTML += `
+                <div class="mod-item">
+                    <div class="mod-info">
+                        <h4>${mod.title}</h4>
+                        <p>${mod.category} | ${mod.version}</p>
+                    </div>
+                    <div class="action-btns">
+                        <button class="edit-btn" onclick="editMod('${key}')">Edit</button>
+                        <button class="del-btn" onclick="deleteMod('${key}')">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    window.editMod = (id) => {
+        onValue(ref(db, 'mods/' + id), (snapshot) => {
+            const mod = snapshot.val();
+            document.getElementById('editId').value = id;
+            document.getElementById('title').value = mod.title;
+            document.getElementById('category').value = mod.category;
+            document.getElementById('version').value = mod.version;
+            document.getElementById('imageUrl').value = mod.imageUrl;
+            document.getElementById('downloadUrl').value = mod.downloadUrl || '';
+            document.getElementById('desc').value = mod.description;
+            document.getElementById('longDesc').value = mod.longDescription;
+            document.getElementById('screenshots').value = mod.screenshots ? mod.screenshots.join(', ') : '';
+            
+            document.getElementById('formTitle').innerText = "Editing: " + mod.title;
+            saveBtn.innerText = "💾 Save Changes";
+            window.scrollTo(0,0);
+        }, { onlyOnce: true });
+    };
+
+    window.deleteMod = (id) => {
+        if(confirm("Delete this mod?")) remove(ref(db, 'mods/' + id));
+    };
+</script>
+</body>
+</html>
